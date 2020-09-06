@@ -1,0 +1,98 @@
+//INPUT:-4
+abc
+abcd
+abcdefg
+abcdef
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+struct trie{
+  struct trie *child[26];
+  bool isend;
+
+    //constructor
+  trie(){
+      memset(child,0,sizeof(child));
+      isend=false;
+
+  }
+  
+};
+//struct trie *root;
+void insert(string str, trie *root)
+{
+  struct trie *cur=root;
+  for(char ch:str)
+  {
+      int idx= ch-'a';
+      if(cur->child[idx]==NULL)
+      {
+          cur->child[idx]= new trie;
+      }
+      cur=cur->child[idx];
+
+  } 
+  cur->isend=true;
+}
+
+bool search(string str, trie *root)
+{
+    struct trie *cur=root;
+  for(char ch:str)
+  {
+      int idx= ch-'a';
+      if(cur->child[idx]==NULL)
+      {
+         return false;
+      }
+      cur=cur->child[idx];
+
+  } 
+  return cur->isend;
+}
+int countChildren(struct trie *root,int *index)
+{
+    int cnt=0;
+    for(int i=0;i<26;i++)
+    {
+        if(root->child[i]!=NULL){
+          cnt++;*index=i;
+        }
+    }
+    return cnt;
+}
+string commom_preix(trie *root)
+{
+   struct trie *cur=root;
+int index;
+string result;
+   while(cur->isend==false and countChildren(cur,&index)==1)
+   {
+       cur=cur->child[index];
+       result+='a'+index;
+   }
+   return result;
+}
+int main()
+{
+  int n;cin>>n;
+  struct trie *root= new trie;
+  while(n--)
+  {
+      string str;
+      cin>>str;
+      insert(str,root);
+  }
+  cout<<commom_preix(root);
+//   int q;cin>>q;
+//   while(q--)
+//   {
+//       string s;
+//       cin>>s;
+//       cout<<search(s,root);
+//   }
+  
+  return 0;
+}

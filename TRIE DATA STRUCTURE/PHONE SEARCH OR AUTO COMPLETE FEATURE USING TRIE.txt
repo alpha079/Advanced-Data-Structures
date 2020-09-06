@@ -1,0 +1,84 @@
+2
+gforgeeks
+geeksquiz
+gee
+
+#include<bits/stdc++.h>
+using namespace std;
+
+struct trie{
+    bool isEnd;
+    struct trie *child[26];
+
+    trie(){
+        isEnd=false;
+        memset(child,0,sizeof(child));
+    }
+};
+
+void insert(trie *root, string str)
+{
+   struct trie *curr=root;
+    
+    int n=str.length();
+    for(int i=0;i<n;i++)
+    {
+        int index=str[i]-'a';
+        if(curr->child[index]==NULL)
+        {
+            curr->child[index]= new trie;
+
+        }
+        curr=curr->child[index];
+    }
+    curr->isEnd=true;
+}
+void display_words(trie *curr, string prefix)
+{
+   if(curr->isEnd==true)
+   {
+       cout<<prefix<<endl;
+   }
+   for(char i='a';i<='z';i++)
+   {
+       if(curr->child[i-'a']!=NULL)
+       {
+           display_words(curr->child[i-'a'],prefix+(char)i);
+       }
+   }
+}
+void display_result_at_each_word(trie *root, string str)
+{
+    struct trie *curr=root;
+    int n=str.length();
+    string prefix;
+    for(int i=0;i<n;i++)
+    {
+       prefix+=str[i];
+       if(curr->child[str[i]-'a']==NULL)
+       {
+           cout<<"No word found for this word:-"<<prefix;
+           break;
+       }
+       curr=curr->child[str[i]-'a'];
+       cout<<"Suggestion found after this word "<<  prefix<<" are"<<endl;
+       display_words(curr,prefix);
+
+    }
+}
+
+int main()
+{    int n;
+cin>>n;
+struct trie *root= new trie;
+while(n--)
+{
+    string str;
+    cin>>str;
+    insert(root,str);
+}
+string query;
+cin>>query;
+display_result_at_each_word(root, query);
+ return 0;
+}
