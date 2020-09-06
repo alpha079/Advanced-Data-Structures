@@ -1,0 +1,63 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class node{
+  public:
+    int val;
+    vector<node*> child;
+
+    node(int _val)
+    {
+        val=_val;
+    }
+    node(int _val, vector<node*> _child)
+    {
+        val=_val;
+        child=_child;
+    }
+};
+double max_avg=INT_MIN;
+double node_value=0;
+ vector<double> dfs(node * root)
+ {
+     if(!root)
+     {
+         return {0,0};
+     }
+   int sum=0;
+   double count=1;
+     for(auto children: root->child){
+        vector<double> csum=dfs(children);
+        sum+=csum[0];
+        count+=csum[1];
+     }
+     sum+=root->val;
+     double avg=sum/count;
+     if(avg>max_avg and count>1)
+     {
+         max_avg=avg;
+         node_value=root->val;
+     }
+     return {avg,count};
+ }
+int count_subtree_max_average(node *root)
+{
+   
+    dfs(root);
+    return node_value;
+   
+}
+
+int main()
+{
+   node *node1=new node(20);
+   node *node2=new node(12);
+   node *node3=new node(18);
+   node1->child={node2,node3};
+   node2->child={new node(11),new node(2),new node(3)};
+   node3->child={new node(15),new node(8)};
+   
+   cout<<count_subtree_max_average(node1);
+   //cout<<max_sum<<" "<<node_value;
+    return 0;
+}
