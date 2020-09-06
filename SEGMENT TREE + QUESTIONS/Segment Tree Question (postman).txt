@@ -1,0 +1,98 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1234567;
+long long tree[4*N+1];
+pair<int, int>p[N];
+void build_tree(int index, int low, int high)
+{
+    if(low==high)
+    {
+        tree[index]=p[low].second;
+        return;
+    }
+    int mid=(low+high)/2;
+    build_tree(2*index,low,mid);
+    build_tree(2*index+1,mid+1,high);
+    tree[index]=max(tree[2*index],tree[2*index+1]);
+
+}
+int query(int index, int low, int high , int start, int end)
+{
+    if(start<=low and high<=end)
+    {
+        return tree[index];
+    }
+    int mid=(low+high)/2;
+
+    if(start<=mid){
+        if(end<=mid)
+        {
+            return query(2*index,low,mid,start,end);
+        }
+        else{
+        int left=query(2*index,low,mid,start,mid);
+        int right=query(2*index+1,mid+1,high,mid+1,end);
+        return max(left,right);
+
+        }
+    }
+
+    else {return query(2*index+1,mid+1,high, start, end);}
+}
+int main()
+{
+   int n;
+   cin>>n;
+   
+   for(int i=1;i<=n;i++)
+   {
+       cin>>p[i].first>>p[i].second;
+   }
+   sort(p+1,p+n+1);
+   build_tree(1,1,n);
+//    for(int i=1;i<100;i++)
+//    {
+//        cout<<tree[i]<<" ";
+//    }
+
+int q;
+cin>>q;
+while(q--)
+{
+    int l,r;
+    cin>>l>>r;
+    pair<int, int> f1,f2;
+
+    f1={l,INT_MIN};
+    f2={r,INT_MIN};
+    
+    auto it1=lower_bound(p+1,p+n+1,f1);
+    auto it2=lower_bound(p+1,p+n+1,f2);
+    if((*it1).first > l) {
+            it1 = prev(it1);
+        }
+        if((*it2).first > r) {
+            it2 = prev(it2);
+        }
+
+   // cout<<(*it1).first<<" "<<(*it2).first<<endl;
+   int start=it1-(p);
+   int end=it2-(p);
+  cout<<start<<" "<<end<<endl;
+ cout<<query(1,1,n,start, end)<<endl;
+}
+    return 0;
+}
+
+inout:==
+
+5
+1000 300
+1100 400
+1300 200
+1700 500
+2000 600
+3
+1000 1400
+1700 1900
+0 2200
