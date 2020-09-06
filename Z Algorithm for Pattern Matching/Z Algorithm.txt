@@ -1,0 +1,114 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long int 
+// INPUT:- ababaa aba
+
+auto z_algorithm(string str)
+{
+   ll len=str.length();
+   ll left(0),right(0);
+   vector<int> res(len,0);
+   for(int i=1;i<len;i++)
+   {
+       if(i>right)
+       { 
+           left=i,right=i;
+           while(right<len and str[right]==str[right-left])
+              right++;
+          res[i]=right-left;
+          right--;
+       }
+       else{
+           //first find the relative index
+           ll index=i-left;
+           if(i+res[index]<=right)
+           {
+                res[i]=res[index];
+           }
+           else{
+                left=i;
+           while(right<len and str[right]==str[right-left])
+              right++;
+          res[i]=right-left;
+          right--;
+           }
+
+
+       }
+   }
+   return res;
+
+}
+int main()
+{  
+    string s,p;
+    cin>>s>>p;
+    auto tot=p+"$"+s;
+    auto z=z_algorithm(tot);
+    cout<<"Index Found @"<<endl;
+    for(int i=0;i<z.size();i++)
+    {
+        if(z[i]==p.length())
+        {
+            cout<<i-p.length()-1<<endl;
+        }
+    }
+    cout<<endl;
+    return 0;
+}#include<bits/stdc++.h>
+using namespace std;
+#define ll long long int 
+
+auto z_algorithm(string str)
+{
+   ll len=str.length();
+   ll left(0),right(0);
+   vector<int> res(len,0);
+   for(int i=1;i<len;i++)
+   {
+       if(i>right)
+       { 
+           left=i,right=i;
+           while(right<len and str[right]==str[right-left])
+              right++;
+          res[i]=right-left;
+          right--;
+       }
+       else{
+           //first find the relative index
+           ll index=i-left;
+           if(i+res[index]<=right)
+           {
+                res[i]=res[index];
+           }
+           else{
+                left=i;
+           while(right<len and str[right]==str[right-left])
+              right++;
+          res[i]=right-left;
+          right--;
+           }
+
+
+       }
+   }
+   return res;
+
+}
+int main()
+{  
+    string s,p;
+    cin>>s>>p;
+    auto tot=p+"$"+s;
+    auto z=z_algorithm(tot);
+    cout<<"Index Found @"<<endl;
+    for(int i=0;i<z.size();i++)
+    {
+        if(z[i]==p.length())
+        {
+            cout<<i-p.length()-1<<endl;
+        }
+    }
+    cout<<endl;
+    return 0;
+}
